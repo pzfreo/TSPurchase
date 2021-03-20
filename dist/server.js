@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PORepository = void 0;
 const express = require("express");
 const typeorm_1 = require("typeorm");
 const PurchaseOrder_1 = require("./entity/PurchaseOrder");
@@ -26,7 +27,7 @@ typeorm_1.createConnection({
     createPO(PORepository); // make sure there is at least one entry
     const app = express();
     app.use(express.json());
-    app.use('/', routes_1.routes);
+    app.use('/purchase', routes_1.routes);
     app.listen(PORT, () => {
         console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
     });

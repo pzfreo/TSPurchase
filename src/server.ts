@@ -31,7 +31,7 @@ createConnection(
     
     const app = express();
     app.use(express.json());
-    app.use('/', routes);
+    app.use('/purchase', routes);
     
     app.listen(PORT, () => {
       console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);

@@ -5,15 +5,14 @@ import { PORepository } from "./server";
 
 const routes = Router();
 
-const BASE_URI = "/purchase";
 
-routes.get(BASE_URI, async function(req: Request, res: Response) {
+routes.get("/", async function(req: Request, res: Response) {
     const purchases = await PORepository.find();
     const purchaseIds = purchases.map( function (po:PurchaseOrder)  { return {"href": po.id}});
     res.json(purchaseIds);
 });
 
-routes.get(BASE_URI+"/:id", async function(req: Request, res: Response) {
+routes.get("/:id", async function(req: Request, res: Response) {
     try {
         const po = await PORepository.findOne(req.params.id);
         return res.json(po);    
@@ -24,7 +23,7 @@ routes.get(BASE_URI+"/:id", async function(req: Request, res: Response) {
     
 });
 
-routes.post(BASE_URI, async function(req: Request, res: Response) {
+routes.post("/", async function(req: Request, res: Response) {
     try {
 
         const po : PurchaseOrder = await PORepository.create(req.body);
@@ -36,7 +35,7 @@ routes.post(BASE_URI, async function(req: Request, res: Response) {
     }
 });
 
-routes.put(BASE_URI+"/:id", async function(req: Request, res: Response) {
+routes.put("/:id", async function(req: Request, res: Response) {
     
     try {
         const po = await PORepository.findOne(req.params.id);
@@ -55,7 +54,7 @@ routes.put(BASE_URI+"/:id", async function(req: Request, res: Response) {
     
 });
 
-routes.delete(BASE_URI+"/:id", async function (req: Request , res: Response) {
+routes.delete("/:id", async function (req: Request , res: Response) {
     
     try {
         const po :PurchaseOrder = await PORepository.findOne(req.params.id);

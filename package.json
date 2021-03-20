@@ -4,11 +4,12 @@
    "description": "purchase order REST service",
    "main": "index.js",
    "scripts": {
-      "start": "ts-node src/index.ts",
-      "dev": "nodemon dist/server.js",
-      "test": "ts-mocha --reporter spec  'test/**/*.test.ts'",
-      "test-dev": "nodemon --watch . --ext ts --exec \"mocha -r ts-node/register src/test/*.ts\"",
-      "build": "tsc "
+      "start": "node dist/server.js",
+      "dev": "nodemon --watch . --ext ts --exec \"tsc && node dist/server.js\"",
+      "test": "newman run PO_postmantests.json",
+      "test-dev": "nodemon --watch . --ext ts --exec \"sleep 5 && newman run PO_postmantests.json\"",
+      "build": "tsc",
+      "watch": "tsc --watch"
    },
    "repository": {
       "type": "git",
@@ -25,6 +26,7 @@
       "@types/mocha": "^8.2.1",
       "express": "^4.17.1",
       "mysql": "^2.14.1",
+      "newman": "^5.2.2",
       "nodemon": "^2.0.7",
       "pg": "^8.5.1",
       "reflect-metadata": "^0.1.10",

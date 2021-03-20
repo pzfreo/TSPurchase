@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes = void 0;
 const express_1 = require("express");
 const server_1 = require("./server");
 const routes = express_1.Router();
 exports.routes = routes;
-const BASE_URI = "/purchase";
-routes.get(BASE_URI, async function (req, res) {
+routes.get("/", async function (req, res) {
     const purchases = await server_1.PORepository.find();
     const purchaseIds = purchases.map(function (po) { return { "href": po.id }; });
     res.json(purchaseIds);
 });
-routes.get(BASE_URI + "/:id", async function (req, res) {
+routes.get("/:id", async function (req, res) {
     try {
         const po = await server_1.PORepository.findOne(req.params.id);
         return res.json(po);
@@ -20,7 +20,7 @@ routes.get(BASE_URI + "/:id", async function (req, res) {
         return res.status(404).json({ error: "order not found" }); // not found
     }
 });
-routes.post(BASE_URI, async function (req, res) {
+routes.post("/", async function (req, res) {
     try {
         const po = await server_1.PORepository.create(req.body);
         const results = await server_1.PORepository.save(po);
@@ -31,7 +31,7 @@ routes.post(BASE_URI, async function (req, res) {
         return res.status(400).send({ error: "json not well-formed" }); // BAD_REQUEST
     }
 });
-routes.put(BASE_URI + "/:id", async function (req, res) {
+routes.put("/:id", async function (req, res) {
     try {
         const po = await server_1.PORepository.findOne(req.params.id);
         try {
@@ -48,7 +48,7 @@ routes.put(BASE_URI + "/:id", async function (req, res) {
         return res.status(404).send({ error: "uuid not found" }); // NOT_FOUND
     }
 });
-routes.delete(BASE_URI + "/:id", async function (req, res) {
+routes.delete("/:id", async function (req, res) {
     try {
         const po = await server_1.PORepository.findOne(req.params.id);
         if (po.isDeleted) {
