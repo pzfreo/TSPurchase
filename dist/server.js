@@ -1,15 +1,14 @@
-import * as express from "express";
-import {Request, Response} from "express";
-import { createConnection, Repository } from "typeorm";
-import { PurchaseOrder } from "./entity/PurchaseOrder";
-import { routes } from "./routes"
-
-const PORT = process.env.PORT || 8000
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+const typeorm_1 = require("typeorm");
+const PurchaseOrder_1 = require("./entity/PurchaseOrder");
+const routes_1 = require("./routes");
+const PORT = process.env.PORT || 8000;
 var PORepository;
+exports.PORepository = PORepository;
 var isConnected;
-
-createConnection(
-{
+typeorm_1.createConnection({
     type: "postgres",
     host: process.env.DBHOST || "localhost",
     port: parseInt(process.env.DBPORT) || 5432,
@@ -17,49 +16,40 @@ createConnection(
     password: process.env.DBPASSWORD || "mypass",
     database: process.env.DBDATABASE || "postgres",
     entities: [
-        PurchaseOrder
+        PurchaseOrder_1.PurchaseOrder
     ],
     synchronize: true,
     logging: false
-}
-).then(connection => {
-
-    PORepository = connection.getRepository(PurchaseOrder);
+}).then(connection => {
+    exports.PORepository = PORepository = connection.getRepository(PurchaseOrder_1.PurchaseOrder);
     isConnected = true;
-
     createPO(PORepository); // make sure there is at least one entry
-    
     const app = express();
     app.use(express.json());
-    app.use('/', routes);
-    
+    app.use('/', routes_1.routes);
     app.listen(PORT, () => {
-      console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+        console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
     });
-
 }).catch(error => console.log(error));
-
-
-function createPO( PORepository:Repository<PurchaseOrder>) {
-    let po = new PurchaseOrder();
-    po.poNumber = "PO879888"
+function createPO(PORepository) {
+    let po = new PurchaseOrder_1.PurchaseOrder();
+    po.poNumber = "PO879888";
     po.customerNumber = "c1";
     po.date = new Date();
     po.isDeleted = false;
     po.paymentReference = "PREF001";
     po.lineItem = "00001";
     po.quantity = 5;
-    
     (async () => {
         try {
             const p = await PORepository.create(po);
             //console.log(p);
             const result = await PORepository.save(p);
             // console.log(JSON.stringify(result));
-        } catch (e) {
+        }
+        catch (e) {
             // Deal with the fact the chain failed
         }
     })();
 }
-
-export { PORepository };
+//# sourceMappingURL=server.js.map
